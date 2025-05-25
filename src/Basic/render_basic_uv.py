@@ -1,6 +1,7 @@
-import slangpy as spy
-import numpy as np
 from pathlib import Path
+
+import numpy as np
+import slangpy as spy
 
 # --- Configuration ---
 DIM_X = 128
@@ -9,13 +10,12 @@ DIR_CURRENT = Path(__file__).parent
 SHADER_FILE_NAME = Path(__file__).stem + ".slang"
 INPUT_IMAGE_FILE = DIR_CURRENT.parent / "assets" / "TX_Essentials_ColorsExample_B.png"
 OUTPUT_IMAGE_FILE = DIR_CURRENT / "temp" / "output.png"
-TEV_PATH = "tev"  # Or a full path to TEV if not in PATH
 
 # --- Device Initialization ---
 print("Creating Slang device...")
 device = spy.Device(
     enable_debug_layers=True,
-    compiler_options={"include_paths": [DIR_CURRENT]},
+    compiler_options=spy.SlangCompilerOptions({"include_paths": [DIR_CURRENT]}),
     enable_print=True,
 )
 print("Slang device created.")

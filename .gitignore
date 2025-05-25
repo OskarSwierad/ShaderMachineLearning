@@ -1,6 +1,7 @@
 # Local files, external tools
-/local/
 /external/
+/local/
+/src/LocalExperiments/
 
 # Any 'temp' folder at any level
 **/temp/
