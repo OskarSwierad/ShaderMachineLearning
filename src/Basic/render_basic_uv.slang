@@ -24,8 +24,6 @@ void MainCS(uint3 dispatchThreadID : SV_DispatchThreadID)
         return;
     }
 
-    const uint2 PixelCoordFlipped = uint2(PixelCoord.x, PixelCoord.y); // Params.Dimensions.y - 
-    const float2 UV = frac(float2(PixelCoordFlipped) / float2(Params.Dimensions));
-    const float3 FinalColorOut = float3(UV, 1.0); // * Params.TintColor;
-    Params.OutTexture[PixelCoord] = float4(FinalColorOut, 1.0);
+    const float2 UV = frac(float2(PixelCoord) / float2(Params.Dimensions));
+    Params.OutTexture[PixelCoord] = float4(UV, 0, 1);
 }

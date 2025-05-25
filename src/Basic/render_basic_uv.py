@@ -1,17 +1,14 @@
 import slangpy as spy
 import numpy as np
 from pathlib import Path
-from PIL import Image
-import subprocess
-import os
 
 # --- Configuration ---
-DIM_X = 32
-DIM_Y = 32
+DIM_X = 128
+DIM_Y = DIM_X
 DIR_CURRENT = Path(__file__).parent
-SHADER_FILE_NAME = "slang-basic-uv.slang"
-INPUT_IMAGE_FILE = DIR_CURRENT / "jeep.jpg"
-OUTPUT_IMAGE_FILE = DIR_CURRENT / "output_rendered.png"
+SHADER_FILE_NAME = Path(__file__).stem + ".slang"
+INPUT_IMAGE_FILE = DIR_CURRENT.parent / "assets" / "TX_Essentials_ColorsExample_B.png"
+OUTPUT_IMAGE_FILE = DIR_CURRENT / "temp" / "output.png"
 TEV_PATH = "tev"  # Or a full path to TEV if not in PATH
 
 # --- Device Initialization ---
@@ -37,7 +34,6 @@ print("Output texture ready.")
 
 # --- Load Shader ---
 print(f"Loading shader program from '{SHADER_FILE_NAME}'...")
-# shader_module = spy.Module.load_from_file(device, SHADER_FILE)
 program = device.load_program(SHADER_FILE_NAME, ["MainCS"])
 kernel = device.create_compute_kernel(program)
 print("Shader program loaded.")
@@ -56,7 +52,6 @@ kernel.dispatch(
     command_encoder=command_encoder
 )
 device.submit_command_buffer(command_encoder.finish())
-device.wait()
 print("Shader dispatched.")
 
 device.flush_print()
@@ -67,7 +62,10 @@ print("Saving and displaying output image...")
 # Display in TEV
 spy.tev.show(output_tex, name="Rendered Output")
 
-# Also save as PNG if needed
+# Save an image
+if not OUTPUT_IMAGE_FILE.parent.is_dir():
+    OUTPUT_IMAGE_FILE.parent.mkdir()
+
 output_tex.to_bitmap().convert(
     pixel_format=spy.Bitmap.PixelFormat.rgb,
     component_type=spy.Bitmap.ComponentType.uint8,
