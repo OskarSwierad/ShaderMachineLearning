@@ -1,3 +1,10 @@
+# Local files, external tools
+/local/
+/external/
+
+# Any 'temp' folder at any level
+**/temp/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
