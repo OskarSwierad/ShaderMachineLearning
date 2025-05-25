@@ -59,17 +59,26 @@ device.flush_print()
 # --- Save and View Output Image ---
 print("Saving and displaying output image...")
 
-# Display in TEV
-spy.tev.show(output_tex, name="Rendered Output")
-
 # Save an image
 if not OUTPUT_IMAGE_FILE.parent.is_dir():
     OUTPUT_IMAGE_FILE.parent.mkdir()
 
-output_tex.to_bitmap().convert(
+output_bmp = output_tex.to_bitmap().convert(
     pixel_format=spy.Bitmap.PixelFormat.rgb,
     component_type=spy.Bitmap.ComponentType.uint8,
     srgb_gamma=False,
-).write(OUTPUT_IMAGE_FILE)
+)
+output_bmp.write(OUTPUT_IMAGE_FILE)
 
 print(f"File saved as {OUTPUT_IMAGE_FILE}.")
+
+# Display in a running TEV instance (https://github.com/Tom94/tev)
+# spy.tev.show(output_tex, name="Rendered Output")
+
+# Display with matplotlib
+import matplotlib.pyplot as plt
+fig, plot_axis = plt.subplots(1, 1, figsize=(5,5), tight_layout=True)
+plot_axis.imshow(output_bmp)
+plot_axis.set_title("Output")
+plot_axis.axis("off")
+plt.show()
